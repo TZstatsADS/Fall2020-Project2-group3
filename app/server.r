@@ -1,7 +1,6 @@
-
 server<-function(input, output,session){
-################################################################################################################################
-# business map for month
+  ################################################################################################################################
+  # business map for month
   observeEvent(input$basic_metric_month, {
     choice <- basic_metric_select_month()%>% 
       select(-Name, -date)%>%
@@ -15,7 +14,7 @@ server<-function(input, output,session){
     else if(input$basic_metric_month=='Revenue') colnames(merge_data)[21:25]
     merge_data %>% 
       select(Name, date, sel)})
- 
+  
   metric_select_month <- reactive({
     merge_data%>% 
       select(Name, mth, input$metric_month) %>%
@@ -30,7 +29,7 @@ server<-function(input, output,session){
       select(Name, Value) %>%
       right_join(names, by = "Name")
   })
-
+  
   # Map Part
   output$stmaps<- renderLeaflet({
     map_data <- month_select()
@@ -42,7 +41,7 @@ server<-function(input, output,session){
     business_map(map_data,labels)
   })
   
-################################################################################################################################
+  ################################################################################################################################
   observeEvent(input$basic_metric_date, {
     choice <-basic_metric_select_date()%>% 
       select(-Name, -date)%>%
@@ -84,8 +83,8 @@ server<-function(input, output,session){
     business_map(map_data,labels)
     
   })
-#-------------------------------------------------------------------------------------------------------------------------------
-################################################################################################################################
+  #-------------------------------------------------------------------------------------------------------------------------------
+  ################################################################################################################################
   observeEvent(input$var, {
     choice <- variable()%>%
       select(-Name, -date)%>%
@@ -98,6 +97,9 @@ server<-function(input, output,session){
     else if(input$var=='Death Cases') colnames(covid19)[11]
     else if(input$var=='Active Cases') colnames(covid19)[13]
     else if(input$var=='Recovered Cases') colnames(covid19)[12]
+    else if(input$var=='Incident Rate') colnames(covid19)[7]
+    else if(input$var=='Testing Rate') colnames(covid19)[8]
+    else if(input$var=='Hospitalization Rate') colnames(covid19)[9]
     covid19 %>%
       select(Name, date, sel)%>%as.data.frame()
   })
@@ -122,8 +124,8 @@ server<-function(input, output,session){
       "<strong>%s<br/>%s<br/>%s",map_data$Name, input$var, map_data$Value)%>%lapply(htmltools::HTML)
     covid_map(map_data, labels)
   })
-
-################################################################################################################################
+  
+  ################################################################################################################################
   inputtext <- reactive(input$job_table %>% str_to_lower())
   output$job_table <- DT::renderDataTable({DT::datatable(whole_data[,-1],filter = "none", extensions = c('Buttons'),
                                                          options = list(scrollY = 600,
@@ -145,12 +147,12 @@ server<-function(input, output,session){
                                                                           )),
                                                                         fixedColumns = TRUE), 
                                                          rownames = FALSE)})
-
-
-################################################################################################################################
-# Business Trend Plot
+  
+  
+  ################################################################################################################################
+  # Business Trend Plot
   output$business_trend <- renderPlotly({
-      busi_trend_plot <- merge_data %>%
+    busi_trend_plot <- merge_data %>%
       mutate(Province_State = toupper(Province_State)) %>%
       filter(Province_State == input$busi_state) %>%
       select(Province_State, date, input$busi_metric_1, input$busi_metric_2) %>%
@@ -166,7 +168,7 @@ server<-function(input, output,session){
     ggplotly(busi_trend_plot, tooltip=c('Name', 'value'))
   })
   
-# Covid Trend Plot
+  # Covid Trend Plot
   output$covid_trend <- renderPlotly({
     covid_trend_plot <- covid19 %>%
       # mutate(Name = toupper(Province_State)) %>%
@@ -186,9 +188,5 @@ server<-function(input, output,session){
 
 
 #-----------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 
 
