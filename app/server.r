@@ -1,6 +1,6 @@
+
 server<-function(input, output,session){
-  
-#####################################################################################################################################################################
+################################################################################################################################
 # business map for month
   observeEvent(input$basic_metric_month, {
     choice <- basic_metric_select_month()%>% 
@@ -42,8 +42,7 @@ server<-function(input, output,session){
     business_map(map_data,labels)
   })
   
-#####################################################################################################################################################################
-# business map for date
+################################################################################################################################
   observeEvent(input$basic_metric_date, {
     choice <-basic_metric_select_date()%>% 
       select(-Name, -date)%>%
@@ -85,70 +84,106 @@ server<-function(input, output,session){
     business_map(map_data,labels)
     
   })
-#-----------------------------------------------------------------------------------------------------------------------------
-#################################################################################################################
-observeEvent(input$var, {
-  choice <- variable()%>%
-    select(-Name, -date)%>%
-    colnames()
-  #updateSelectInput(session, 'metric_date', choices=c(choice))
-})
-
-variable <- reactive({
-  sel <- if(input$var=='Confirmed Cases') colnames(covid19)[10]
-  else if(input$var=='Death Cases') colnames(covid19)[11]
-  else if(input$var=='Active Cases') colnames(covid19)[13]
-  else if(input$var=='Recovered Cases') colnames(covid19)[12]
-  covid19 %>%
-    select(Name, date, sel)%>%as.data.frame()
-})
-
-
-dateFiltered <- reactive({
-  thing <- variable() %>% filter(as.Date(date) >= as.Date(input$date_range[1]) & as.Date(date) <=
-                                   as.Date(input$date_range[2]))
-  Value <- thing%>%select(3) #sel
-  colnames(Value) <-'Value'
-  thing <- data.frame(thing, Value)
-  thing %>%
-    select(Name, Value) %>%
-    right_join(names, by = "Name")
+#-------------------------------------------------------------------------------------------------------------------------------
+################################################################################################################################
+  observeEvent(input$var, {
+    choice <- variable()%>%
+      select(-Name, -date)%>%
+      colnames()
+    #updateSelectInput(session, 'metric_date', choices=c(choice))
+  })
   
-})
+  variable <- reactive({
+    sel <- if(input$var=='Confirmed Cases') colnames(covid19)[10]
+    else if(input$var=='Death Cases') colnames(covid19)[11]
+    else if(input$var=='Active Cases') colnames(covid19)[13]
+    else if(input$var=='Recovered Cases') colnames(covid19)[12]
+    covid19 %>%
+      select(Name, date, sel)%>%as.data.frame()
+  })
+  
+  
+  dateFiltered <- reactive({
+    thing <- variable() %>% filter(as.Date(date) >= as.Date(input$date_range[1]) & as.Date(date) <=
+                                     as.Date(input$date_range[2]))
+    Value <- thing%>%select(3) #sel
+    colnames(Value) <-'Value'
+    thing <- data.frame(thing, Value)
+    thing %>%
+      select(Name, Value) %>%
+      right_join(names, by = "Name")
+    
+  })
+  
+  
+  output$covidmaps<- renderLeaflet({
+    map_data <- dateFiltered()
+    dt1 <- input$date_range[1]
+    dt2 <- input$date_range[2]
+    labels <- sprintf(
+      "<strong>%s<br/>%s<br/>%s",map_data$Name, input$var, map_data$Value)%>%lapply(htmltools::HTML)
+    covid_map(map_data, labels)
+  })
+
+################################################################################################################################
+  inputtext <- reactive(input$job_table %>% str_to_lower())
+  output$job_table <- DT::renderDataTable({DT::datatable(whole_data,filter = "none", extensions = c('Buttons'),
+                                                         options = list(scrollY = 500,
+                                                                        scrollX = 1000,
+                                                                        autoWidth = TRUE,
+                                                                        deferRender = TRUE,
+                                                                        scroller = TRUE,
+                                                                        select= TRUE,
+                                                                        visible=TRUE,
+                                                                        # paging = TRUE,
+                                                                        # pageLength = 25,
+                                                                        dom = 'Bfrt<"bottom"lip>',
+                                                                        buttons = 
+                                                                          list('colvis','copy',  list(
+                                                                            extend = 'collection',
+                                                                            buttons = c('csv', 'excel', 'pdf'),
+                                                                            text = 'Download'
+                                                                            
+                                                                          )),
+                                                                        fixedColumns = TRUE), 
+                                                         rownames = FALSE)})
 
 
-output$covidmaps<- renderLeaflet({
-  map_data <- dateFiltered()
-  dt1 <- input$date_range[1]
-  dt2 <- input$date_range[2]
-  labels <- sprintf(
-    "<strong>%s<br/>%s<br/>%s",map_data$Name, input$var, map_data$Value)%>%lapply(htmltools::HTML)
-  covid_map(map_data, labels)
-})
-
-#################################################################################################################
-inputtext <- reactive(input$job_table %>% str_to_lower())
-output$job_table <- DT::renderDataTable({DT::datatable(whole_data,filter = "none", extensions = c('Buttons'),
-                                                       options = list(scrollY = 500,
-                                                                      scrollX = 1000,
-                                                                      autoWidth = TRUE,
-                                                                      deferRender = TRUE,
-                                                                      scroller = TRUE,
-                                                                      select= TRUE,
-                                                                      visible=TRUE,
-                                                                      # paging = TRUE,
-                                                                      # pageLength = 25,
-                                                                      dom = 'Bfrt<"bottom"lip>',
-                                                                      buttons = 
-                                                                        list('colvis','copy',  list(
-                                                                          extend = 'collection',
-                                                                          buttons = c('csv', 'excel', 'pdf'),
-                                                                          text = 'Download'
-                                                                          
-                                                                        )),
-                                                                      fixedColumns = TRUE), 
-                                                       rownames = FALSE)})
-
+################################################################################################################################
+# Business Trend Plot
+  output$business_trend <- renderPlotly({
+      busi_trend_plot <- merge_data %>%
+      mutate(Province_State = toupper(Province_State)) %>%
+      filter(Province_State == input$busi_state) %>%
+      select(Province_State, date, input$busi_metric_1, input$busi_metric_2) %>%
+      # mutate("% Change in Transportation Revenue" = `% Change in Transportation Revenue`*10000) %>%
+      gather("Metric", "Value", 3:4) %>%
+      ggplot(aes(x = date, y = Value, color = Metric)) +
+      geom_line() +
+      labs(x = "Date") +
+      theme_bw() +
+      labs(y = "% Change") +
+      theme(legend.position = c(0.8, 0.2))
+    
+    ggplotly(busi_trend_plot, tooltip=c('Name', 'value'))
+  })
+  
+# Covid Trend Plot
+  output$covid_trend <- renderPlotly({
+    covid_trend_plot <- covid19 %>%
+      # mutate(Name = toupper(Province_State)) %>%
+      filter(Name == input$covid_state) %>%
+      select(Name, date, input$covid_metric_1, input$covid_metric_2) %>%
+      gather("Metric", "Value", 3:4) %>%
+      ggplot(aes(x = date, y = Value, color = Metric)) +
+      geom_line() +
+      labs(x = "Date") +
+      theme_bw() +
+      labs(y = "Value") +
+      theme(legend.position = c(0.8, 0.2))
+    
+    ggplotly(covid_trend_plot, tooltip=c('Name', 'value'))
+  })
 }
 
 

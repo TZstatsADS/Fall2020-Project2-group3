@@ -15,9 +15,8 @@ library(shinydashboardPlus)
 library(lubridate)
 library(DT)
 #####################################################################################################################################################################
-whole_data <- read.csv("~/Documents/5243/Fall2020-Project2-group3/output/whole.csv")
-
-merge_data <- read_csv("~/Documents/5243/Fall2020-Project2-group3/output/full_data.csv")
+whole_data <- read.csv("/Users/mz/Desktop/Applied Data Science/ADS-group-3/output/whole_new.csv")
+merge_data <- read_csv("/Users/mz/Desktop/Applied Data Science/ADS-group-3/output/full_data.csv")
 merge_data$spend_all_inclow[merge_data$spend_all_inclow=="."]<-"0"
 merge_data$revenue_ss60[merge_data$revenue_ss60=="."]<-"0"
 merge_data$merchants_ss60[merge_data$merchants_ss60=="."]<-"0"
@@ -80,10 +79,13 @@ business_map <- function(map_data, labels,pal){
                                                                                                                         position = "bottomright")}
 ###############################################################################################################
 #covid
-covid19 <- read.csv("~/Documents/5243/Fall2020-Project2-group3/output/covid19.csv")
+covid19 <- read.csv("/Users/mz/Desktop/Applied Data Science/ADS-group-3/output/covid19.csv")
 covid19 <- covid19[,-1]
 covid19 <- covid19%>%mutate(date=as.Date(date))
 covid19[is.na(covid19)] <- 0
+
+colnames(covid19)[4:12] <- c("Aggregated Confirmed Cases", "Aggregated Deaths", "Aggregated Active", "Aggregated Recover", 
+                             "Incident Rate", "Testing Rate", "Hospitalization Rate", "Confirmed Cases", "Deaths")
 
 covid_map <- function(map_data, labels, pal){
   pal <- colorBin("Reds", domain = map_data$Value)

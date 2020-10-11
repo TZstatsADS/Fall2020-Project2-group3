@@ -19,16 +19,17 @@ sidebar <- dashboardSidebar(
                          tabName = 'covid_map'
              )
     ),
-    menuItem('Analyze a States/County', 
+    menuItem('Analyze a State', 
              tabName = 'stats', 
              icon = icon("chart-line"), 
-             menuSubItem('State', 
-                         tabName = 'specific_state_stats'
+             menuSubItem('Business', 
+                         tabName = 'business_trend'
              ),
-             menuSubItem('County', 
-                         tabName = 'specific_county_stats'
+             menuSubItem('Covid-19', 
+                         tabName = 'covid_trend'
              ) 
-    ),  menuItem("Job search", tabName = "job", icon = icon("clipboard")),
+    ),  
+    menuItem("Job search", tabName = "job", icon = icon("clipboard")),
     menuItem('Reference', 
              tabName = 'ref', 
              icon = icon('ad')
@@ -126,14 +127,14 @@ body <- dashboardBody(fill = FALSE,
                                                            )
                                                        ))))
     ),
-    # Specific Stats
+    # Covid map
     tabItem(tabName = 'covid_map',
             fluidRow(
               tabPanel("",
                        leafletOutput('covidmaps', width="100%",height=750),
                        absolutePanel(id = "covidid", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
                                      top = 260, left = "auto", right = "auto", bottom = "auto", width = 200, height = "auto",
-                                     box(status='info', width=20,
+                                     box(status='info', width=100,
                                          selectInput(inputId = 'var', 
                                                      label = 'Case Type', 
                                                      choices = c('Confirmed Cases','Death Cases', 'Active Cases', 'Recovered Cases'),
@@ -156,10 +157,49 @@ body <- dashboardBody(fill = FALSE,
                        
               )
             ),
-    tabItem(tabName="specific_county_stats",
+    # Business Trend
+    tabItem(tabName="business_trend",
             fluidRow(
-              
-            )   
+              plotlyOutput("business_trend", width="100%", height=650),
+              absolutePanel(id = "control", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
+                            top = 260, left = "auto", right = "auto", bottom = "auto", width = 200, height = "auto",
+                            
+                            box(width = 30, status='info',
+                                selectInput("busi_state", "State:",
+                                            choices = names$Name, 
+                                            selected = names$Name[1]),
+                                br(),
+                                selectInput("busi_metric_1", "Metric", 
+                                            choices = colnames(merge_data)[c(7:25)],
+                                            selected = "% Change in Accomodation and Food Service"),
+                                br(),
+                                selectInput("busi_metric_2", "Metric", 
+                                            choices = colnames(merge_data)[c(7:25)],
+                                            selected = "% Change in Arts, Entertainment, and Recreation"))
+              )
+            ) 
+    ),
+    # Covid Trend
+    tabItem(tabName="covid_trend",
+            fluidRow(
+              plotlyOutput("covid_trend", width="90%", height=650),
+              absolutePanel(id = "control", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
+                            top = 260, left = "auto", right = "auto", bottom = "auto", width = 200, height = "auto",
+                            
+                            box(width = 30, status='info',
+                                selectInput("covid_state", "State:",
+                                            choices = names$Name, 
+                                            selected = names$Name[1]),
+                                br(),
+                                selectInput("covid_metric_1", "Metric", 
+                                            choices = colnames(covid19)[4:14],
+                                            selected = "Aggregated Confirmed Cases"),
+                                br(),
+                                selectInput("covid_metric_2", "Metric", 
+                                            choices = colnames(covid19)[4:14],
+                                            selected = "Aggregated Deaths"))
+              )
+            ) 
     ),
     #Reference
     tabItem(tabName = 'ref',
@@ -175,7 +215,6 @@ body <- dashboardBody(fill = FALSE,
 )
 
 #####################################################################################################################################################################
-
 ui <- dashboardPagePlus(
   skin='black',
   header=header,
