@@ -1,3 +1,4 @@
+source("global.r")
 # Header
 header <- dashboardHeader(title='Covid 19 Group 3')
 
@@ -29,7 +30,7 @@ sidebar <- dashboardSidebar(
                          tabName = 'covid_trend'
              ) 
     ),  
-    menuItem("Job search", tabName = "job", icon = icon("clipboard")),
+    menuItem("Information Searching", tabName = "tabcb", icon = icon("clipboard")),
     menuItem('Reference', 
              tabName = 'ref', 
              icon = icon('ad')
@@ -138,7 +139,7 @@ body <- dashboardBody(fill = FALSE,
                                                              selectInput(inputId = 'var', 
                                                                          label = 'Case Type', 
                                                                          choices = c('Confirmed Cases','Death Cases', 'Active Cases', 'Recovered Cases',
-                                                                                       'Incident Rate', 'Testing Rate', 'Hospitalization Rate'),
+                                                                                     'Incident Rate', 'Testing Rate', 'Hospitalization Rate'),
                                                                          selected = 'Confirmed Cases'
                                                              ), 
                                                              dateRangeInput(inputId = 'date_range', 
@@ -210,16 +211,28 @@ body <- dashboardBody(fill = FALSE,
                                 ),
                                 
                         ),
-                        tabItem(tabName = "job",
-                                fluidPage(DTOutput("job_table"))
+                        #Searching
+                        tabItem(tabName = "tabcb",
+                                fluidPage(box(width = 12,height = 365,status = "success",searchInput("cb_table",
+                                                                                                  h2(strong(br(),br(),br(),"Information Searching for Business and Covid-19:",align = "center"), 
+                                                                                                     style = "color:white"),
+                                                                                                  btnSearch = icon("search"))),
+                                          tags$style(HTML(".box.box-success{
+                        background:url('../business_covid1.jpeg');background-repeat: no-repeat;background-size: 100% 100%;opacity: 1.1}")),
+                                          
+                                          fluidRow(width = 4, height = 1,status = "primary", height = "575",solidHeader = T,
+                                                   column(12,
+                                                          dataTableOutput("cb_table")
+                                                   )
+                                          )
+                                #fluidPage(DTOutput("cb_table"))
                         )
                       )
-)
-
+))
 #####################################################################################################################################################################
 ui <- dashboardPagePlus(
   skin='black',
   header=header,
   sidebar=sidebar,
-  body=body,
+  body=body
 )
