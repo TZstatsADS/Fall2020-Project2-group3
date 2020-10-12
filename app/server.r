@@ -10,9 +10,9 @@ server<-function(input, output,session){
   })
   
   basic_metric_select_month <- reactive({
-    sel <- if(input$basic_metric_month=='Consumer Spending') colnames(merge_data)[7:15]
-    else if(input$basic_metric_month=='Small Business Open') colnames(merge_data)[16:20]
-    else if(input$basic_metric_month=='Small Business Revenue') colnames(merge_data)[21:25]
+    sel <- if(input$basic_metric_month=='Affinity') colnames(merge_data)[7:15]
+    else if(input$basic_metric_month=='Merchants') colnames(merge_data)[16:20]
+    else if(input$basic_metric_month=='Revenue') colnames(merge_data)[21:25]
     merge_data %>% 
       select(Name, date, sel)})
   
@@ -90,33 +90,37 @@ server<-function(input, output,session){
     choice <- variable()%>%
       select(-Name, -date)%>%
       colnames()
-    #updateSelectInput(session, 'metric_date', choices=c(choice))
   })
   
   variable <- reactive({
-    sel <- if(input$var=='Confirmed Cases') colnames(covid19)[10]
-    else if(input$var=='Death Cases') colnames(covid19)[11]
-    else if(input$var=='Active Cases') colnames(covid19)[13]
-    else if(input$var=='Recovered Cases') colnames(covid19)[12]
-    else if(input$var=='Incident Rate') colnames(covid19)[7]
-    else if(input$var=='Testing Rate') colnames(covid19)[8]
-    else if(input$var=='Hospitalization Rate') colnames(covid19)[9]
+    sel <- if(input$var=='Confirmed Cases') colnames(covid19)[3]
+    else if(input$var=='Death Cases') colnames(covid19)[4]
+    else if(input$var=='Active Cases') colnames(covid19)[5]
+    else if(input$var=='Recovered Cases') colnames(covid19)[6]
+    else if(input$var=='Incident Rate') colnames(covid19)[14]
+    else if(input$var=='Testing Rate') colnames(covid19)[15]
+    else if(input$var=='Hospitalization Rate') colnames(covid19)[16]
     covid19 %>%
       select(Name, date, sel)%>%as.data.frame()
   })
   
-  
   dateFiltered <- reactive({
-    thing <- variable() %>% filter(as.Date(date)>= as.Date(input$date_range[1]) & as.Date(date) <=as.Date(input$date_range[2]))
-    Value <- thing%>%select(3) #sel
-    colnames(Value) <-'Value'
-    thing <- data.frame(thing, Value)
-    thing %>%
-      select(Name, Value) %>%
-      right_join(names, by = "Name")
+    if (input$date_range[1]=="2020-01-22"){
+      thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[2]))
+      pwdat <- thing %>% pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
+      colnames(pwdat)[2] <- "Value"
+      pwdat %>% select(Name,Value)%>%
+        right_join(names, by = "Name")
+    }else{
+      thing <- variable() %>% filter(as.Date(date)==as.Date(as.Date(input$date_range[1])-1) | as.Date(date)==as.Date(input$date_range[2]))
+      pwdat <- thing%>%pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
+      pwdat['Value'] = pwdat[,3]-pwdat[2]
+      pwdat %>% select(Name,Value)%>%
+        right_join(names, by = "Name")
+    }
     
   })
-  
+
   output$covidmaps<- renderLeaflet({
     map_data <- dateFiltered()
     dt1 <- input$date_range[1]
