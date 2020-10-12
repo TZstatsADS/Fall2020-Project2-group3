@@ -79,10 +79,9 @@ business_map <- function(map_data, labels,pal){
                                                                                                                         position = "bottomright")}
 ###############################################################################################################
 #covid
-covid19 <- read.csv("~/Documents/GitHub/Fall2020-Project2-group3/output/covid19.csv")
+covid19 <- read.csv("../output/covid19_new.csv")
 covid19 <- covid19[,-1]
 covid19$date = as.Date(covid19[,2])
-View(covid19)
 
 colnames(covid19)[3:11] <- c("Aggregated Confirmed Cases", "Aggregated Deaths", "Aggregated Active", "Aggregated Recover", 
                              "Incident Rate", "Testing Rate", "Hospitalization Rate", "Confirmed Cases", "Deaths")
@@ -111,7 +110,3 @@ covid_map <- function(map_data, labels, pal){
                                                                                                                         title = NULL,position = "bottomright")
   
 }
-
-
-  
-  
