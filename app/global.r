@@ -82,9 +82,9 @@ business_map <- function(map_data, labels,pal){
 covid19 <- read.csv("../output/covid19_new.csv")
 covid19 <- covid19[,-1]
 covid19$date = as.Date(covid19[,2])
-
-colnames(covid19)[3:11] <- c("Aggregated Confirmed Cases", "Aggregated Deaths", "Aggregated Active", "Aggregated Recover", 
-                             "Incident Rate", "Testing Rate", "Hospitalization Rate", "Confirmed Cases", "Deaths")
+colnames(covid19)[c(3:11,14:16)] <- c("Aggregated Confirmed Cases", "Aggregated Deaths", "Aggregated Active", "Aggregated Recover", 
+                             "Incident Rate", "Testing Rate", "Hospitalization Rate", "Confirmed Cases", "Deaths","Aggregated Incident Rate",
+                             "Aggregated Testing Rate","Aggregated Hospitalization Rate")
 
 covid_map <- function(map_data, labels, pal){
   pal <- colorBin("Reds", domain = map_data$Value)
@@ -110,3 +110,5 @@ covid_map <- function(map_data, labels, pal){
                                                                                                                         title = NULL,position = "bottomright")
   
 }
+
+
