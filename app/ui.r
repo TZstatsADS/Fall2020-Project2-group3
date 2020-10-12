@@ -90,7 +90,7 @@ body <- dashboardBody(fill = FALSE,
                                                                 box(status='info', width=12,
                                                                     selectInput(inputId = 'basic_metric_month', 
                                                                                 label = 'Metrics', 
-                                                                                choices = c('Consumer Spending','Small Business Open','Small Business Revenue'),
+                                                                                choices = c('Affinity','Merchants','Revenue'),
                                                                                 selected = 'Affinity'
                                                                     ), 
                                                                     br(),
