@@ -1,3 +1,4 @@
+source("global.r")
 server<-function(input, output,session){
   ################################################################################################################################
   # business map for month
@@ -126,15 +127,29 @@ server<-function(input, output,session){
   })
   
   ################################################################################################################################
-  inputtext <- reactive(input$job_table %>% str_to_lower())
-  output$job_table <- DT::renderDataTable({DT::datatable(whole_data[,-1],filter = "none", extensions = c('Buttons'),
-                                                         options = list(scrollY = 600,
-                                                                        scrollX = 1000,
-                                                                        autoWidth = TRUE,
+  inputtext <- reactive(input$cb_table %>% str_to_lower())
+  tab <- whole_data[,-1]%>%mutate(Name = str_to_title(Name))
+  output$cb_table <- DT::renderDataTable({DT::datatable(tab[str_detect(tab$Name, regex(inputtext(), ignore_case = T))|str_detect(tab$date, inputtext()), ] %>%
+                                                           select(Name, date, confirmed, death, Recovered, Active,
+                                                                  spend_all,merchants_all,revenue_all) %>%
+                                                           rename(States=Name, Dates= date, Confirms= confirmed, Deaths=death,
+                                                                  Recovers = Recovered, Actives = Active,
+                                                                  `%Change in Spending of all Merchant Categories`=spend_all,
+                                                                  `%Change in all Small Businesses Open`=merchants_all,
+                                                                  `%Change in all Small Businesses Revenue`=revenue_all),
+                                                         #filter = "none", 
+                                                         extensions = c('Buttons'),
+                                                         options = list(#scrollY = 600,
+                                                                        #scrollX = 1000,
+                                                                        #autoWidth = TRUE,
                                                                         deferRender = TRUE,
-                                                                        scroller = TRUE,
+                                                                        #scroller = TRUE,
                                                                         select= TRUE,
                                                                         visible=TRUE,
+                                                                        searching = FALSE, 
+                                                                        scrollX = TRUE, 
+                                                                        pageLength =10,
+                                                                        scrollY = '500px',
                                                                         # paging = TRUE,
                                                                         # pageLength = 25,
                                                                         dom = 'Bfrt<"bottom"lip>',
@@ -143,12 +158,14 @@ server<-function(input, output,session){
                                                                             extend = 'collection',
                                                                             buttons = c('csv', 'excel', 'pdf'),
                                                                             text = 'Download'
-                                                                            
                                                                           )),
                                                                         fixedColumns = TRUE), 
-                                                         rownames = FALSE)})
+                                                                        rownames = FALSE)})
   
-  
+    observeEvent(input$cb_table, {
+      updateTextInput(session, "cb_table")
+    })
+
   ################################################################################################################################
   # Business Trend Plot
   output$business_trend <- renderPlotly({
