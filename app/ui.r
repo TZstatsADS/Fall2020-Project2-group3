@@ -1,3 +1,33 @@
+packages.used <- c("shinydashboard","leaflet", "maps", "viridis", "DT", "stringr", "dplyr", "tidyverse", "tibble",
+                   "leaflet.extras", "RColorBrewer", "ggplot2", "plotly", "scales", "shinyWidgets", "shinydashboardPlus",
+                   "lubridate", "shinyalert")
+# check packages that need to be installed.
+packages.needed <- setdiff(packages.used, 
+                           intersect(installed.packages()[,1], 
+                                     packages.used))
+# install additional packages
+if(length(packages.needed) > 0){
+  install.packages(packages.needed, dependencies = TRUE)
+}
+
+library(shinydashboard)
+library(leaflet)
+library(maps)
+library(tidyverse)
+library(viridis)
+library(leaflet.extras)
+library(RColorBrewer)
+library(ggplot2)
+library(plotly)
+library(scales)
+library(dplyr)
+library(shinyWidgets)
+library(shinydashboardPlus)
+library(lubridate)
+library(DT)
+library(tibble)
+library(stringr)
+library(shinyalert)
 source("global.r")
 # Header
 header <- dashboardHeader(title='Covid 19 Group 3')
@@ -71,11 +101,17 @@ body <- dashboardBody(fill = FALSE,
                           )
                         )
                       ),
+                      # Home
                       tabItems(
-                        # Home
                         tabItem(tabName='Home',
-                                fluidPage( 
-                                ), 
+                                fluidRow(
+                                  valueBoxOutput("max_confirm"),
+                                  valueBoxOutput("max_death"),
+                                  valueBoxOutput("max_recover"),
+                                  valueBoxOutput("max_incident"),
+                                  valueBoxOutput("max_test"),
+                                  valueBoxOutput("max_hosptial")
+                                ),
                         ),
                         # States map
                         tabItem(tabName = 'business_map', 
@@ -130,17 +166,19 @@ body <- dashboardBody(fill = FALSE,
                         ),
                         # Covid map
                         tabItem(tabName = 'covid_map',
-                                fluidRow(
-                                  tabPanel("",
+                                fluidPage(
+                                  tabBox(id='', width = 22, title=" ",
+                                  tabPanel("Pandemic in US",
                                            leafletOutput('covidmaps', width="100%",height=750),
                                            absolutePanel(id = "covidid", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
                                                          top = 260, left = "auto", right = "auto", bottom = "auto", width = 250, height = "auto",
                                                          box(status='info', width=100,
                                                              selectInput(inputId = 'var', 
                                                                          label = 'Case Type', 
-                                                                         choices = c('Confirmed Cases','Death Cases', 'Active Cases', 'Recovered Cases',
-                                                                                     'Incident Rate', 'Testing Rate', 'Hospitalization Rate'),
-                                                                         selected = 'Confirmed Cases'
+                                                                         choices = c('Changes of Confirmed Cases','Changes of Death Cases', 'Changes of Active Cases', 
+                                                                                     'Changes of Recovered Cases',
+                                                                                     'Mean Incident Rate', 'Mean Testing Rate', 'Mean Hospitalization Rate'),
+                                                                         selected = 'Changes of Confirmed Cases'
                                                              ), 
                                                              dateRangeInput(inputId = 'date_range', 
                                                                             label = 'Select Date Range',
@@ -148,14 +186,10 @@ body <- dashboardBody(fill = FALSE,
                                                                             end = '2020-09-20',
                                                                             min = '2020-01-22', 
                                                                             max = '2020-09-20'),
-                                                             
+                                                             textOutput("DateRange"),
                                                              uiOutput('moreControls_1')
-                                                         )))
-                                  
-                                  
-                                  
-                                  
-                                  
+                                                         ))))
+                                 
                                   
                                 )
                         ),
@@ -195,12 +229,12 @@ body <- dashboardBody(fill = FALSE,
                                                   selected = names$Name[1]),
                                       br(),
                                       selectInput("covid_metric_1", "Metric", 
-                                                  choices = colnames(covid19)[4:14],
-                                                  selected = "Aggregated Confirmed Cases"),
+                                                  choices = colnames(covid19)[3:9],
+                                                  selected = "Confirmed Cases"),
                                       br(),
                                       selectInput("covid_metric_2", "Metric", 
-                                                  choices = colnames(covid19)[4:14],
-                                                  selected = "Aggregated Deaths"),uiOutput('if'))
+                                                  choices = colnames(covid19)[3:9],
+                                                  selected = "Deaths"),uiOutput('if'))
                                   #)
                                 ) 
                         ),
