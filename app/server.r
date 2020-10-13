@@ -1,5 +1,84 @@
+packages.used <- c("shinydashboard","leaflet", "maps", "viridis", "DT", "stringr", "dplyr", "tidyverse", "tibble",
+                   "leaflet.extras", "RColorBrewer", "ggplot2", "plotly", "scales", "shinyWidgets", "shinydashboardPlus",
+                   "lubridate", "shinyalert")
+# check packages that need to be installed.
+packages.needed <- setdiff(packages.used, 
+                           intersect(installed.packages()[,1], 
+                                     packages.used))
+# install additional packages
+if(length(packages.needed) > 0){
+  install.packages(packages.needed, dependencies = TRUE)
+}
+
+library(shinydashboard)
+library(leaflet)
+library(maps)
+library(tidyverse)
+library(viridis)
+library(leaflet.extras)
+library(RColorBrewer)
+library(ggplot2)
+library(plotly)
+library(scales)
+library(dplyr)
+library(shinyWidgets)
+library(shinydashboardPlus)
+library(lubridate)
+library(DT)
+library(tibble)
+library(stringr)
+library(shinyalert)
 source("global.r")
 server<-function(input, output,session){
+  ################################################################################################################################
+  output$max_confirm <- renderValueBox({
+    max_confirm_tab <- covid19 %>% filter(`Confirmed Cases`==max(`Confirmed Cases`)) %>% select(Name,`Confirmed Cases`)
+      valueBox(value=max_confirm_tab$`Confirmed Cases`,
+               subtitle = paste("Max number of Confirmed Cases is in",as.character(max_confirm_tab$Name)),
+               icon = icon("head-side-virus"),
+               color = "red")
+  })
+  #colnames(covid19)
+  output$max_death <- renderValueBox({
+    max_death_tab <- covid19 %>% filter(Deaths==max(Deaths)) %>% select(Name,Deaths)
+    valueBox(value=max_death_tab$Deaths,
+             subtitle = paste("Max number of Death Cases is in",as.character(max_death_tab$Name)),
+             icon = icon("skull-crossbones"),
+             color = "light-blue")
+  })
+  
+  output$max_recover <- renderValueBox({
+    max_recover_tab <- covid19 %>% filter(Recovers==max(Recovers)) %>% select(Name,Recovers)
+    valueBox(value=max_recover_tab$Recovers,
+             subtitle = paste("Max number of Recovered Cases is in",as.character(max_recover_tab$Name)),
+             icon = icon("grin-squint"),
+             color = "green")
+  })
+  
+  output$max_incident <- renderValueBox({
+    max_incident_tab <- covid19 %>% filter(`Incident Rate`==max(`Incident Rate`)) %>% select(Name,`Incident Rate`)
+    valueBox(value=max_incident_tab$`Incident Rate`,
+             subtitle = paste("Max Incident Rate is in",as.character(max_incident_tab$Name)),
+             icon = icon("head-side-mask"),
+             color = "orange")
+  })
+  
+  output$max_test <- renderValueBox({
+    max_test_tab <- covid19 %>% filter(`Testing Rate`==max(`Testing Rate`)) %>% select(Name,`Testing Rate`)
+      valueBox(value=max_test_tab$`Testing Rate`,
+               subtitle = paste("Max Tesing Rate is in",as.character(max_test_tab$Name)),
+               icon = icon("vial"),
+               color = "purple")
+  })
+  
+  output$max_hosptial <- renderValueBox({
+    max_hospital_tab <- covid19 %>% filter(`Hospitalization Rate`==max(`Hospitalization Rate`)) %>% select(Name,`Hospitalization Rate`)
+    valueBox(value=max_hospital_tab$`Hospitalization Rate`,
+             subtitle = paste("Max Hospital Rate is in",as.character(max_hospital_tab$Name)),
+             icon = icon("hospital"),
+             color = "maroon")
+  })
+  
   ################################################################################################################################
   # business map for month
   observeEvent(input$basic_metric_month, {
@@ -92,33 +171,74 @@ server<-function(input, output,session){
       colnames()
   })
   
+  r <- reactiveValues(
+    start = as.Date("2020-01-22"),
+    end = as.Date("2020-09-20")
+  )
+
+  observeEvent(input$date_range, {
+    start <- as.Date(input$date_range[1])
+    end <- as.Date(input$date_range[2])
+    if (start >= end){
+      shinyalert::shinyalert("start > end", type = "error")
+      updateDateRangeInput(
+        session,
+        "date_range",
+        start = r$start,
+        end = r$end
+      )
+    } else {
+      r$start <- input$date_range[1]
+      r$end <- input$date_range[1]
+    }
+  }, ignoreInit = TRUE)
+  
   variable <- reactive({
-    sel <- if(input$var=='Confirmed Cases') colnames(covid19)[3]
-    else if(input$var=='Death Cases') colnames(covid19)[4]
-    else if(input$var=='Active Cases') colnames(covid19)[5]
-    else if(input$var=='Recovered Cases') colnames(covid19)[6]
-    else if(input$var=='Incident Rate') colnames(covid19)[14]
-    else if(input$var=='Testing Rate') colnames(covid19)[15]
-    else if(input$var=='Hospitalization Rate') colnames(covid19)[16]
+    sel <- if(input$var=='Changes of Confirmed Cases') colnames(covid19)[3]
+    else if(input$var=='Changes of Death Cases') colnames(covid19)[4]
+    else if(input$var=='Changes of Active Cases') colnames(covid19)[5]
+    else if(input$var=='Changes of Recovered Cases') colnames(covid19)[6]
+    else if(input$var=='Mean Incident Rate') colnames(covid19)[7]
+    else if(input$var=='Mean Testing Rate') colnames(covid19)[8]
+    else if(input$var=='Mean Hospitalization Rate') colnames(covid19)[9]
     covid19 %>%
       select(Name, date, sel)%>%as.data.frame()
   })
   
   dateFiltered <- reactive({
-    if (input$date_range[1]=="2020-01-22"){
-      thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[2]))
+    if (input$var=='Mean Incident Rate'|input$var=='Mean Testing Rate'|input$var=='Mean Hospitalization Rate'){
+      thing <- variable() %>% filter(as.Date(date)>=as.Date(input$date_range[1]) & as.Date(date)<=as.Date(input$date_range[2]))
       pwdat <- thing %>% pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
-      colnames(pwdat)[2] <- "Value"
-      pwdat %>% select(Name,Value)%>%
+      cbind(Name=pwdat$Name,data.frame(Value=rowSums(pwdat[,2:ncol(pwdat)])/(ncol(pwdat)-1)))%>%
         right_join(names, by = "Name")
     }else{
-      thing <- variable() %>% filter(as.Date(date)==as.Date(as.Date(input$date_range[1])-1) | as.Date(date)==as.Date(input$date_range[2]))
-      pwdat <- thing%>%pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
-      pwdat['Value'] = pwdat[,3]-pwdat[2]
-      pwdat %>% select(Name,Value)%>%
-        right_join(names, by = "Name")
+      if (input$date_range[1]=="2020-01-22"){
+        thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[2]))
+        pwdat <- thing %>% pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
+        colnames(pwdat)[2] <- "Value"
+        pwdat %>% select(Name,Value)%>%
+          right_join(names, by = "Name")
+      }else{
+        thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[1]) | as.Date(date)==as.Date(input$date_range[2]))
+        pwdat <- thing%>%pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
+        pwdat['Value'] = pwdat[,3]-pwdat[2]
+        pwdat %>% select(Name,Value)%>%
+          right_join(names, by = "Name")
+      }
     }
     
+  })
+  
+  output$DateRange <- renderText({
+    # make sure end date later than start date
+    validate(
+      need(input$date_range[2] > input$date_range[1], "end date is earlier than start date"
+      )
+    )
+    
+    paste("There are", 
+          difftime(input$date_range[2], input$date_range[1], units="days"),
+          "days between your selected dates")
   })
 
   output$covidmaps<- renderLeaflet({
