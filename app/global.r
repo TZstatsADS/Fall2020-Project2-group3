@@ -1,4 +1,16 @@
 #####################################################################################################################################################################library(shiny)
+packages.used <- c("shinydashboard","leaflet", "maps", "viridis", "DT", "stringr", "dplyr", "tidyverse", "tibble",
+                   "leaflet.extras", "RColorBrewer", "ggplot2", "plotly", "scales", "shinyWidgets", "shinydashboardPlus",
+                   "lubridate", "shinyalert")
+# check packages that need to be installed.
+packages.needed <- setdiff(packages.used, 
+                           intersect(installed.packages()[,1], 
+                                     packages.used))
+# install additional packages
+if(length(packages.needed) > 0){
+  install.packages(packages.needed, dependencies = TRUE)
+}
+
 library(shinydashboard)
 library(leaflet)
 library(maps)
@@ -14,6 +26,9 @@ library(shinyWidgets)
 library(shinydashboardPlus)
 library(lubridate)
 library(DT)
+library(tibble)
+library(stringr)
+library(shinyalert)
 #####################################################################################################################################################################
 whole_data <- read.csv("../output/whole_new.csv")
 merge_data <- read_csv("../output/full_data.csv")
@@ -82,9 +97,8 @@ business_map <- function(map_data, labels,pal){
 covid19 <- read.csv("../output/covid19_new.csv")
 covid19 <- covid19[,-1]
 covid19$date = as.Date(covid19[,2])
-colnames(covid19)[c(3:11,14:16)] <- c("Aggregated Confirmed Cases", "Aggregated Deaths", "Aggregated Active", "Aggregated Recover", 
-                             "Incident Rate", "Testing Rate", "Hospitalization Rate", "Confirmed Cases", "Deaths","Aggregated Incident Rate",
-                             "Aggregated Testing Rate","Aggregated Hospitalization Rate")
+colnames(covid19)[c(3:9)] <- c("Confirmed Cases", "Deaths", "Recovers", "Actives",
+                             "Incident Rate", "Testing Rate", "Hospitalization Rate")
 
 covid_map <- function(map_data, labels, pal){
   pal <- colorBin("Reds", domain = map_data$Value)
