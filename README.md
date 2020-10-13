@@ -21,7 +21,7 @@ The **learning goals** for this project is:
 Term: Fall 2020
 
 + Team #
-+ **Projec title**: + Team members
++ **Projec title**: How COVID-19 pandemic affects small businesses in US+ Team members
 	+ team member 1
 	+ team member 2
 	+ team member 3
