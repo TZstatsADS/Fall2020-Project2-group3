@@ -36,7 +36,7 @@ Here is also a related documentation:
 
 + **Contribution statement**: 
 
-+ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a colorful and informative home page. Built the data search page.
++ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a informative home page. Built the data search page.
 
 
 All members approve our work presented in our GitHub repository including this contribution statement.
