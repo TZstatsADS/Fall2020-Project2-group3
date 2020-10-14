@@ -36,7 +36,7 @@ Here is also a related documentation:
 
 + **Contribution statement**: 
 
-+ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a colorful and informative home page. Built the data search page.
++ Xinyi Wei: Carried out data pre-processing for the merge_data cvs and business map page. Designed, developed and finalized the business date and month map. Created a the HTML interactive informative home page part and finalized with Yunuo Ma. Built the data search page with Yunuo Ma. Designed and added informative parts to complete the shiny structure. 
 + Yunuo Ma: Came up with essential ideas include providing information about the additional dataset and setting up goals and orientations of the project in the brainstorming step. Carried out data pre-processing on the covid19 dataset. Designed, developed, and finalized covid19 map page, and implemented 6 value boxes and boxplot of the home page. Built and optimized searching features in collaboration with Xinyi to finalize the Search Information page. Provided detailed project information on the README file.
 
 All members approve our work presented in our GitHub repository including this contribution statement.
