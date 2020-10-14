@@ -3,6 +3,12 @@
 ### [Project Description](doc/project2_desc.md)
 
 ![screenshot](doc/Home.png)
+![screenshot](doc/Business_Map.png)
+![screenshot](doc/Covid_Map.png)
+![screenshot](doc/Business_Trend.png)
+![screenshot](doc/Covid_Trend.png)
+![screenshot](doc/Search.png)
+
 
 In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app on a topic of your choice using [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19). See [Project 2 Description](doc/project2_desc.md) for more details.  
 
