@@ -35,7 +35,8 @@ Here is also a related documentation:
 + **Project summary**: Our project developed a Shiny App with information about COVID-19 in US regarding to economical circumstances for small businesses. Our data is from both JHU CSSE COVID-19 Data and Opportunity Insights Economic Tracker Data (listed above). In particular, we further analyzed metrics about small businesses including affinity of consumer, revenue and merchant of small businesses, and indicators about COVID-19 including 4 categories of cases and 3 categories of rates corresponding to different states in US. COVID-19 has dramatically altered everyone's life pattern and this app could provide everyone in US with information about pandemic situation. Moreover, this app is also aimed to help local small business owners so that they could gather some useful information here in order to formulate future business strategies and improve their future operating conditions. We hope to support everyone in US especially for small business owners. Together, we're relentlessly fighting COVID-19!
 
 + **Contribution statement**: 
-Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a colorful and informative home page. Built the data search page.
+
++ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a colorful and informative home page. Built the data search page.
 
 
 All members approve our work presented in our GitHub repository including this contribution statement.
