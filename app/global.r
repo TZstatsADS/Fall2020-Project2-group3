@@ -31,10 +31,13 @@ library(stringr)
 library(shinyalert)
 #####################################################################################################################################################################
 whole_data <- read.csv("../output/whole_new.csv")
-merge_data <- read_csv("../output/full_data.csv")
-merge_data$spend_all_inclow[merge_data$spend_all_inclow=="."]<-"0"
-merge_data$revenue_ss60[merge_data$revenue_ss60=="."]<-"0"
-merge_data$merchants_ss60[merge_data$merchants_ss60=="."]<-"0"
+merge_data <- read.csv("../output/full_data.csv")
+merge_data$spend_all_inclow <- as.numeric(merge_data$spend_all_inclow)
+merge_data$spend_all_inclow[merge_data$spend_all_inclow=="."]<-0
+merge_data$revenue_ss60 <- as.numeric(merge_data$revenue_ss60)
+merge_data$revenue_ss60[merge_data$revenue_ss60=="."]<-0
+merge_data$merchants_ss60<- as.numeric(merge_data$merchants_ss60)
+merge_data$merchants_ss60[merge_data$merchants_ss60=="."]<-0
 merge_data <- merge_data%>%mutate(Name = str_to_upper(Province_State),date=as.Date(merge_data$date, format = "%m/%d/%y"),spend_all_inclow=as.double(spend_all_inclow),merchants_ss60=as.double(merchants_ss60),revenue_ss60=as.double(revenue_ss60))%>%mutate(mth=months(date))
 colnames(merge_data)[7:15] <- c("% Change in Accomodation and Food Service",
                                 "% Change in Arts, Entertainment, and Recreation",
@@ -57,8 +60,6 @@ colnames(merge_data)[21:25] <- c("% Change in All Small Businesses Revenue",
                                  "% Change in Professional and Business Services Revenue",
                                  "% Change in Education and Health Services Revenue",
                                  "% Change in Leisure and Hospitality Revenue")
-
-
 
 #####################################################################################################################################################################
 # Data load for map
@@ -124,6 +125,4 @@ covid_map <- function(map_data, labels, pal){
                                                                                                                         title = NULL,position = "bottomright")
   
 }
-
-
 
