@@ -23,4 +23,4 @@ Summary: Our project developed a Shiny App with information about COVID-19 in US
 
 **Yunuo Ma**: Came up with essential ideas include providing information about the additional dataset and setting up goals and orientations of the project in the brainstorming step. Carried out data pre-processing on the covid19_new.csv dataset and whole_new.csv dataset. Designed, developed, and finalized COVID-19 map page, and implemented 6 value boxes and boxplot of the home page. Built and optimized searching features in collaboration with Xinyi to finalize the Search Information page. Provided detailed project information on the README file. 
 
-All team members contributed to the GitHub repository and prepared the presentation. All team members approve our work presented in our GitHub repository including this contribution statement.
+All team members approve our work presented in our GitHub repository including this contribution statement.
