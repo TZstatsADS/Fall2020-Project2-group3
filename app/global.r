@@ -30,6 +30,7 @@ library(tibble)
 library(stringr)
 library(shinyalert)
 #####################################################################################################################################################################
+# Data for map and search 
 whole_data <- read.csv("./output/whole_new.csv")
 merge_data <- read.csv("./output/full_data.csv")
 merge_data$spend_all_inclow <- as.numeric(merge_data$spend_all_inclow)
@@ -63,6 +64,7 @@ colnames(merge_data)[21:25] <- c("% Change in All Small Businesses Revenue",
 
 #####################################################################################################################################################################
 # Data load for map
+# Xinyi Wei
 ST<-c("alabama","arizona","arkansas","california","colorado","connecticut","delaware","florida" ,"georgia","idaho","illinois","indiana","iowa","kansas","kentucky","louisiana","maine","maryland","massachusetts","michigan","minnesota","mississippi","missouri","montana","nebraska","nevada","new hampshire","new jersey","new mexico","New York","north carolina","north dakota","ohio","oklahoma","oregon","pennsylvania","rhode island","south carolina", "south dakota","tennessee","texas","utah","vermont","virginia","washington","west virginia","wisconsin","wyoming")
 mapStates = maps::map("state",ST,fill = TRUE, plot = FALSE)
 names <-tibble(Name=str_to_upper(mapStates$names)) %>% 
@@ -70,6 +72,7 @@ names <-tibble(Name=str_to_upper(mapStates$names)) %>%
   select(Name)
 
 #####################################################################################################################################################################
+# Xinyi Wei
 business_map <- function(map_data, labels,pal){
   pal <- colorBin("Blues", domain = map_data$Value)
   leaflet(data = mapStates) %>%  
