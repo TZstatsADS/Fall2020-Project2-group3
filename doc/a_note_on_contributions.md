@@ -11,7 +11,7 @@ Below is an example. If no contribution statement is provided, we will insert a 
 ---
 Sample project README statement.
 
-Project 
+Project: How COVID-19 Pandemic Affects Small Businesses in US (Group 3)
 
 Team members: Yunuo Ma, Xinyi Wei, Minzhi Zhang, Mina Jiang
 
