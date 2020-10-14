@@ -72,6 +72,7 @@ names <-tibble(Name=str_to_upper(mapStates$names)) %>%
   select(Name)
 
 #####################################################################################################################################################################
+# Business map
 # Xinyi Wei
 business_map <- function(map_data, labels,pal){
   pal <- colorBin("Blues", domain = map_data$Value)
@@ -97,7 +98,8 @@ business_map <- function(map_data, labels,pal){
                                                                                                                         title = NULL,
                                                                                                                         position = "bottomright")}
 ###############################################################################################################
-#covid
+# COVID-19 Map
+# Yunuo Ma
 covid19 <- read.csv("./output/covid19_new.csv")
 covid19 <- covid19[,-1]
 covid19$date = as.Date(covid19[,2])
