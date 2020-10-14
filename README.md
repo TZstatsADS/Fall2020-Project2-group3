@@ -25,7 +25,7 @@ Term: Fall 2020
 	+ Minzhi Zhang
 	+ Mina Jiang (Presenter)
 	
-+ Shiny Link: https://mminaj.shinyapps.io/group3/
++ Shiny Link: (https://mminaj.shinyapps.io/group3/)
 
 + Additional Source of Dataset: We used [Opportunity Insights Economic Tracker Data](https://www.kaggle.com/douglaskgaraujo/opportunity-insights-real-time-economic-tracker-us?select=data) This dataset is created as part of Opportunity Insights' Economic Tracker, which you can access directly (and with a very nice user interface) at (https://www.tracktherecovery.org) 
 
