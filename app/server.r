@@ -9,7 +9,6 @@ packages.needed <- setdiff(packages.used,
 if(length(packages.needed) > 0){
   install.packages(packages.needed, dependencies = TRUE)
 }
-
 library(shinydashboard)
 library(leaflet)
 library(maps)
@@ -57,7 +56,7 @@ server<-function(input, output,session){
   
   output$max_incident <- renderValueBox({
     max_incident_tab <- covid19 %>% filter(`Incident Rate`==max(`Incident Rate`)) %>% select(Name,`Incident Rate`)
-    valueBox(value=max_incident_tab$`Incident Rate`,
+    valueBox(value=round(max_incident_tab$`Incident Rate`,digits=2),
              subtitle = paste("Max Incident Rate is in",as.character(max_incident_tab$Name)),
              icon = icon("head-side-mask"),
              color = "orange")
@@ -65,7 +64,7 @@ server<-function(input, output,session){
   
   output$max_test <- renderValueBox({
     max_test_tab <- covid19 %>% filter(`Testing Rate`==max(`Testing Rate`)) %>% select(Name,`Testing Rate`)
-      valueBox(value=max_test_tab$`Testing Rate`,
+      valueBox(value=round(max_test_tab$`Testing Rate`,digits=2),
                subtitle = paste("Max Tesing Rate is in",as.character(max_test_tab$Name)),
                icon = icon("vial"),
                color = "purple")
@@ -73,7 +72,7 @@ server<-function(input, output,session){
   
   output$max_hosptial <- renderValueBox({
     max_hospital_tab <- covid19 %>% filter(`Hospitalization Rate`==max(`Hospitalization Rate`)) %>% select(Name,`Hospitalization Rate`)
-    valueBox(value=max_hospital_tab$`Hospitalization Rate`,
+    valueBox(value=round(max_hospital_tab$`Hospitalization Rate`,digits=2),
              subtitle = paste("Max Hospital Rate is in",as.character(max_hospital_tab$Name)),
              icon = icon("hospital"),
              color = "maroon")
@@ -89,9 +88,9 @@ server<-function(input, output,session){
   })
   
   basic_metric_select_month <- reactive({
-    sel <- if(input$basic_metric_month=='Affinity') colnames(merge_data)[7:15]
-    else if(input$basic_metric_month=='Merchants') colnames(merge_data)[16:20]
-    else if(input$basic_metric_month=='Revenue') colnames(merge_data)[21:25]
+    sel <- if(input$basic_metric_month=='Consumer Spending') colnames(merge_data)[7:15]
+    else if(input$basic_metric_month=='Small Business Open') colnames(merge_data)[16:20]
+    else if(input$basic_metric_month=='Small Business Revenue') colnames(merge_data)[21:25]
     merge_data %>% 
       select(Name, date, sel)})
   
@@ -129,9 +128,9 @@ server<-function(input, output,session){
     updateSelectInput(session, 'metric_date', choices=c(choice))
   })
   basic_metric_select_date <- reactive({
-    sel <- if(input$basic_metric_date=='Affinity') colnames(merge_data)[7:15]
-    else if(input$basic_metric_date=='Merchants') colnames(merge_data)[16:20]
-    else if(input$basic_metric_date=='Revenue') colnames(merge_data)[21:25]
+    sel <- if(input$basic_metric_date=='Consumer Spending') colnames(merge_data)[7:15]
+    else if(input$basic_metric_date=='Small Business Open') colnames(merge_data)[16:20]
+    else if(input$basic_metric_date=='Small Business Revenue') colnames(merge_data)[21:25]
     merge_data %>% 
       select(Name, date, sel)})
   # business map for date
@@ -218,10 +217,16 @@ server<-function(input, output,session){
         colnames(pwdat)[2] <- "Value"
         pwdat %>% select(Name,Value)%>%
           right_join(names, by = "Name")
-      }else{
+      }else if(input$date_range[1]!=input$date_range[2]){
         thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[1]) | as.Date(date)==as.Date(input$date_range[2]))
         pwdat <- thing%>%pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
         pwdat['Value'] = pwdat[,3]-pwdat[2]
+        pwdat %>% select(Name,Value)%>%
+          right_join(names, by = "Name")
+      }else if(input$date_range[1]==input$date_range[2]){
+        thing <- variable() %>% filter(as.Date(date)==as.Date(input$date_range[1]))
+        pwdat <- thing%>%pivot_wider(everything(),names_from=date,values_from=colnames(thing)[3])
+        pwdat['Value']=pwdat[2]
         pwdat %>% select(Name,Value)%>%
           right_join(names, by = "Name")
       }
