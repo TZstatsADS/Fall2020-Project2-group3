@@ -99,7 +99,7 @@ business_map <- function(map_data, labels,pal){
                                                                                                                         position = "bottomright")}
 ###############################################################################################################
 # COVID-19 Map
-# Yunuo Ma, Mina Jiang
+# Yunuo Ma
 covid19 <- read.csv("./output/covid19_new.csv")
 covid19 <- covid19[,-1]
 covid19$date = as.Date(covid19[,2])
