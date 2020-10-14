@@ -25,7 +25,7 @@ Term: Fall 2020
 	+ Minzhi Zhang
 	+ Mina Jiang (Presenter)
 	
-+ Shiny Link:
++ Shiny Link: https://mminaj.shinyapps.io/group3/
 
 + Additional Source of Dataset: We used [Opportunity Insights Economic Tracker Data](https://www.kaggle.com/douglaskgaraujo/opportunity-insights-real-time-economic-tracker-us?select=data) This dataset is created as part of Opportunity Insights' Economic Tracker, which you can access directly (and with a very nice user interface) at (https://www.tracktherecovery.org) 
 
@@ -36,7 +36,8 @@ Here is also a related documentation:
 
 + **Contribution statement**: 
 
-+ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a informative home page. Built the data search page.
++ Xinyi Wei: Carried out data pre-processing, designed and developed the business date and month map, and created a colorful and informative home page. Built the data search page.
++ Yunuo Ma: Came up with essential idea in brainstorming step. Carried out data pre-processiong on covid19 dataset. Designed, developed and finalized covid19 map page, and implemented features of 6 valueboxes and boxplot of home page. Built and optimized searching features in collaboration with Xinyi to finalize Search Information page. Provided detailed project information on README file.
 
 
 All members approve our work presented in our GitHub repository including this contribution statement.
