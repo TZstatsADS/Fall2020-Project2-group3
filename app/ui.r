@@ -9,7 +9,6 @@ packages.needed <- setdiff(packages.used,
 if(length(packages.needed) > 0){
   install.packages(packages.needed, dependencies = TRUE)
 }
-
 library(shinydashboard)
 library(leaflet)
 library(maps)
@@ -121,13 +120,11 @@ body <- dashboardBody(fill = FALSE,
                                   valueBoxOutput("max_test"),
                                   valueBoxOutput("max_hosptial"),
                                   br(),
-                                  img(src="https://raw.githubusercontent.com/TZstatsADS/Fall2020-Project2-group3/master/app/www/business_histgram_home.png?token=AG54Q4J2ARJVALMJSMX2UV27R5ZZW",width=410,height=330,style="float: left;margin:auto 0;"),
-                                  img(src="https://knowledge.insead.edu/sites/www.insead.edu/files/styles/w_650/public/styles/panoramic/public/images/2020/04/covid-19_how_every_business_can_help.jpg?itok=WmDcAeeJ",width=410,height=330,style="float: left;margin: auto 0;"),
+                                  img(src="https://raw.githubusercontent.com/TZstatsADS/Fall2020-Project2-group3/master/app/www/business_histgram_home.png?token=AG54Q4J2ARJVALMJSMX2UV27R5ZZW",width=545,height=440,style="float: left;margin:auto 0;"),
+                                  img(src="https://knowledge.insead.edu/sites/www.insead.edu/files/styles/w_650/public/styles/panoramic/public/images/2020/04/covid-19_how_every_business_can_help.jpg?itok=WmDcAeeJ",width=520,height=440,style="float: left;margin: auto 0;"),
                                   img(src="https://raw.githubusercontent.com/TZstatsADS/Fall2020-Project2-group3/master/app/www/boxplot_b.png?token=AOLIQAGWLIBQHAJXW577KS27R6AHS",
-                                      width=410,height=330,style="float: left;margin: auto 0;")
+                                      width=500,height=440,style="float: middle;margin: auto 0;")
                               
-                                 
-                               
                                
                         )),
                         # States map
@@ -145,8 +142,8 @@ body <- dashboardBody(fill = FALSE,
                                                                 box(status='info', width=12,
                                                                     selectInput(inputId = 'basic_metric_month', 
                                                                                 label = 'Metrics', 
-                                                                                choices = c('Affinity','Merchants','Revenue'),
-                                                                                selected = 'Affinity'
+                                                                                choices = c('Consumer Spending','Small Business Open','Small Business Revenue'),
+                                                                                selected = 'Consumer Spending'
                                                                     ), 
                                                                     br(),
                                                                     selectInput(inputId = 'metric_month', 
@@ -171,8 +168,8 @@ body <- dashboardBody(fill = FALSE,
                                                                                            box(status='info', width=12,
                                                                                                selectInput(inputId = 'basic_metric_date', 
                                                                                                            label = 'Metrics', 
-                                                                                                           choices = c('Affinity','Merchants','Revenue'),
-                                                                                                           selected = 'Affinity'
+                                                                                                           choices = c('Consumer Spending','Small Business Open','Small Business Revenue'),
+                                                                                                           selected = 'Consumer Spending'
                                                                                                ), 
                                                                                                br(),
                                                                                                selectInput(inputId = 'metric_date', 
