@@ -12,17 +12,6 @@
 
 In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app using [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19). See [Project 2 Description](doc/project2_desc.md) for more details.  
 
-The **learning goals** for this project is:
-
-- business intelligence for data science
-- study legacy codes and further development
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
-
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
-
 ## Project Title: How COVID-19 Pandemic Affects Small Businesses in US
 Term: Fall 2020
 
