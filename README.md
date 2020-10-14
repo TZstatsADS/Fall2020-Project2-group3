@@ -2,7 +2,7 @@
 
 ### [Project Description](doc/project2_desc.md)
 
-![screenshot](doc/Home.png)
+![screenshot](doc/home.png)
 ![screenshot](doc/Business_Map.png)
 ![screenshot](doc/Covid_Map.png)
 ![screenshot](doc/Business_Trend.png)
