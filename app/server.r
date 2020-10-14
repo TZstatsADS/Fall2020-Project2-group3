@@ -79,7 +79,8 @@ server<-function(input, output,session){
   })
   
   ################################################################################################################################
-  # business map for month
+  # Business map for month 
+  # Xinyi Wei
   observeEvent(input$basic_metric_month, {
     choice <- basic_metric_select_month()%>% 
       select(-Name, -date)%>%
@@ -121,6 +122,8 @@ server<-function(input, output,session){
   })
   
   ################################################################################################################################
+  # Business map for date
+  # Xinyi Wei
   observeEvent(input$basic_metric_date, {
     choice <-basic_metric_select_date()%>% 
       select(-Name, -date)%>%
@@ -257,6 +260,7 @@ server<-function(input, output,session){
   })
   
   ################################################################################################################################
+  # Search part Yunuo Ma, Xinyi Wei
   inputtext <- reactive(input$cb_table %>% str_to_lower())
   tab <- whole_data[,-1]%>%mutate(Name = str_to_title(Name))
   output$cb_table <- DT::renderDataTable({DT::datatable(tab[str_detect(tab$Name, regex(inputtext(), ignore_case = T))|str_detect(tab$date, inputtext()), ] %>%
