@@ -181,7 +181,7 @@ body <- dashboardBody(fill = FALSE,
                                                                                            )
                                                                              ))))
                         ),
-                        # Covid map
+                        # Covid map Yunuo Ma
                         tabItem(tabName = 'covid_map',
                                 fluidPage(
                                   tabBox(id='', width = 22, title=" ",
@@ -210,7 +210,7 @@ body <- dashboardBody(fill = FALSE,
                                   
                                 )
                         ),
-                        # Business Trend
+                        # Business Trend Minzhi Zhang
                         tabItem(tabName="business_trend",
                                 fluidRow(
                                   
@@ -233,7 +233,7 @@ body <- dashboardBody(fill = FALSE,
                                   #)
                                 ) 
                         ),
-                        # Covid Trend
+                        # Covid Trend Minzhi Zhang
                         tabItem(tabName="covid_trend",
                                 fluidRow(
                                   box(h3(strong('The Covid Trend Map')), width=9, status='primary',plotlyOutput("covid_trend", width="90%", height=650)),
@@ -255,7 +255,7 @@ body <- dashboardBody(fill = FALSE,
                                   #)
                                 ) 
                         ),
-                        #Reference
+                        #Reference Minzhi Zhang, Mina Jiang
                         tabItem(tabName = 'ref',
                                 fluidPage(
                                   mainPanel(width=12,
@@ -333,7 +333,7 @@ body <- dashboardBody(fill = FALSE,
                         ),
                                 
                       
-                        #Searching 
+                        #Searching Yunuo Ma, Xinyi Wei
                         tabItem(tabName = "tabcb",
                                 fluidPage(box(width = 12,height = 365,status = "success",searchInput("cb_table",
                                                                                                   h2(strong(br(),br(),br(),"Information Searching for Business and Covid-19:",align = "center"), 
