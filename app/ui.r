@@ -102,7 +102,7 @@ body <- dashboardBody(fill = FALSE,
                           )
                         )
                       ),
-                      # Home
+                      # Home Xinyi Wei, Yunuo Ma
                       tabItems(
                         tabItem(tabName='Home',
                             fluidPage(
@@ -127,7 +127,7 @@ body <- dashboardBody(fill = FALSE,
                               
                                
                         )),
-                        # States map
+                        # Business map Xinyi Wei
                         tabItem(tabName = 'business_map', 
                                 fluidPage(
                                   #tags$style(HTML(".box.box-info{
@@ -333,7 +333,7 @@ body <- dashboardBody(fill = FALSE,
                         ),
                                 
                       
-                        #Searching
+                        #Searching 
                         tabItem(tabName = "tabcb",
                                 fluidPage(box(width = 12,height = 365,status = "success",searchInput("cb_table",
                                                                                                   h2(strong(br(),br(),br(),"Information Searching for Business and Covid-19:",align = "center"), 
