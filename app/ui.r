@@ -181,7 +181,7 @@ body <- dashboardBody(fill = FALSE,
                                                                                            )
                                                                              ))))
                         ),
-                        # Covid map Yunuo Ma
+                        # Covid map Yunuo Ma, Mina Jiang
                         tabItem(tabName = 'covid_map',
                                 fluidPage(
                                   tabBox(id='', width = 22, title=" ",
