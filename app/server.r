@@ -30,6 +30,8 @@ library(shinyalert)
 source("global.r")
 server<-function(input, output,session){
   ################################################################################################################################
+  # Value boxes for Home Page 
+  # Yunuo Ma
   output$max_confirm <- renderValueBox({
     max_confirm_tab <- covid19 %>% filter(`Confirmed Cases`==max(`Confirmed Cases`)) %>% select(Name,`Confirmed Cases`)
       valueBox(value=max_confirm_tab$`Confirmed Cases`,
@@ -168,6 +170,8 @@ server<-function(input, output,session){
   })
   #-------------------------------------------------------------------------------------------------------------------------------
   ################################################################################################################################
+  # COVID-19 Map 
+  # Yunuo Ma
   observeEvent(input$var, {
     choice <- variable()%>%
       select(-Name, -date)%>%
@@ -273,19 +277,13 @@ server<-function(input, output,session){
                                                                   `%Change in all Small Businesses Revenue`=revenue_all),
                                                          #filter = "none", 
                                                          extensions = c('Buttons'),
-                                                         options = list(#scrollY = 600,
-                                                                        #scrollX = 1000,
-                                                                        #autoWidth = TRUE,
-                                                                        deferRender = TRUE,
-                                                                        #scroller = TRUE,
+                                                         options = list(deferRender = TRUE,
                                                                         select= TRUE,
                                                                         visible=TRUE,
                                                                         searching = FALSE, 
                                                                         scrollX = TRUE, 
                                                                         pageLength =10,
                                                                         scrollY = '500px',
-                                                                        # paging = TRUE,
-                                                                        # pageLength = 25,
                                                                         dom = 'Bfrt<"bottom"lip>',
                                                                         buttons = 
                                                                           list('colvis','copy',  list(
@@ -302,6 +300,7 @@ server<-function(input, output,session){
 
   ################################################################################################################################
     # Business Trend Plot
+    # Minzhi Zhang
     observeEvent(input$busi_metric_1, {
       choice <- busi_metric_select()
       updateSelectInput(session, 'busi_metric_2', choices=c(choice))
@@ -330,6 +329,7 @@ server<-function(input, output,session){
     })
     
     # Covid Trend Plot
+    # Minzhi Zhang
     observeEvent(input$covid_metric_1, {
       choice <- covid_metric_select()
       updateSelectInput(session, 'covid_metric_2', choices=c(choice))
